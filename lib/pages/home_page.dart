@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:weatherapp/cubits/weather_cubit/weather_cubit.dart';
+import 'package:weatherapp/cubits/weather_cubit/weather_state.dart';
 import 'package:weatherapp/pages/search_page.dart';
 import 'package:weatherapp/providers/weather_provider.dart';
 
 import '../models/weather_model.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   //WeatherModel? weatherData;
 
   WeatherModel? weatherData;
@@ -37,60 +33,91 @@ class _HomePageState extends State<HomePage> {
         ],
         title: Text('Weather App'),
       ),
-// Provider.of<WeatherProvider>(context , listen: true).weatherData
-      body: weatherData == null
-          ? Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors:[
-                Colors.blue,
-                Colors.blue[300]!,
-                Colors.blue[100]!,
-              ])
+      body: BlocBuilder<WeatherCubit, WeatherState>(
+        builder: (context, State) {
+          if (State is WeathherLoding) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (State is WeathherSuccess) {
+           weatherData = BlocProvider.of<WeatherCubit>(context).weatherModel;
+            return successBody(weatherData: weatherData);
+          } else if (State is WeathherFailure) {
+            return Center(
+              child: Text('SomeThing went wrong please try agin'),
+            );
+          } else {
+            return DefaultlHomePahe();
+          }
+        },
+      ),
+    );
+  }
+}
+
+class DefaultlHomePahe extends StatelessWidget {
+  const DefaultlHomePahe({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'there is no weather start',
+            style: TextStyle(
+              fontSize: 30,
             ),
-            child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'there is no weather start',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                    Text(
-                      '😔',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    ),
-                    Text(
-                      'searching now 🔍',
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+          ),
+          Text(
+            '😔',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+          Text(
+            'searching now 🔍',
+            style: TextStyle(
+              fontSize: 30,
+            ),
           )
-          : Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  weatherData!.getColor(),
-                  weatherData!.getColor()[300]!,
-                  weatherData!.getColor()[100]!,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Spacer(
-                    flex: 3,
-                  ),
-                  Text(
+        ],
+      ),
+    );
+  }
+}
+
+class successBody extends StatelessWidget {
+  const successBody({
+    super.key,
+    required this.weatherData,
+  });
+
+  final WeatherModel? weatherData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        colors: [
+          weatherData!.getColor(),
+          weatherData!.getColor()[300]!,
+          weatherData!.getColor()[100]!,
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      )),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Spacer(
+            flex: 3,
+          ),
+          Text(
             BlocProvider.of<WeatherCubit>(context).cityName!,
             style: TextStyle(
               fontSize: 32,

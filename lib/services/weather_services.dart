@@ -8,15 +8,7 @@ class WeatherService {
     String baseUrl = 'http://api.weatherapi.com/v1';
     String apiKey = '930476fd70284ed598785222232704';
 
-    // Uri url =
-    //     Uri.parse('$baseUrl/forecast.json?key=$apiKey&q=$cityName&days=7');
-    // http.Response response = await http.get(url);
-
-    // Map<String, dynamic> data = jsonDecode(response.body);
-
-    // var jsonData = data['forecast']['forecastday'][0];
-
-    // WeatherModel weather = WeatherModel.fromJison(data);
+   
     WeatherModel? weather;
     try {
       Uri url =

@@ -55,7 +55,7 @@ class WeatherModel {
     }
   }
 
-  MaterialColor getColor() {
+  MaterialColor getColor()  {
     if (weatherStatename == 'Clear' || weatherStatename == 'Sunny') {
       return Colors.orange;
     } else if (weatherStatename == 'Sleet' ||
