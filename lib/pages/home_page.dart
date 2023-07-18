@@ -15,26 +15,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //WeatherModel? weatherData;
 
-  void udateUi() {
-    setState(() {});
-  }
-
   WeatherModel? weatherData;
 
   @override
   Widget build(BuildContext context) {
-    weatherData = Provider.of<WeatherProvider>(context).weatherData;
-
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return SearchPage(
-                    udateUi: udateUi,
-                  );
-                }));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SearchPage();
+                    },
+                  ),
+                );
               },
               icon: Icon(Icons.search))
         ],
@@ -94,58 +91,57 @@ class _HomePageState extends State<HomePage> {
                     flex: 3,
                   ),
                   Text(
-                    Provider.of<WeatherProvider>(context).cityName!,
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Update at: ${weatherData!.date.hour.toString()}:${weatherData!.date.minute.toString()} ',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(weatherData!.getImage()),
-                      Text(
-                        '${weatherData!.temp.toInt()}',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Text('maxTemp: ${weatherData!.maxTemp.toInt()}',
-                              style: TextStyle(
-                                fontSize: 12,
-                              )),
-                          Text('minTemp: ${weatherData!.minTemp.toInt()}',
-                              style: TextStyle(
-                                fontSize: 12,
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  Text(
-                    weatherData!.weatherStatename,
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(
-                    flex: 5,
-                  ),
+            BlocProvider.of<WeatherCubit>(context).cityName!,
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            'Update at: ${weatherData!.date.hour.toString()}:${weatherData!.date.minute.toString()} ',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image.asset(weatherData!.getImage()),
+              Text(
+                '${weatherData!.temp.toInt()}',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Column(
+                children: [
+                  Text('maxTemp: ${weatherData!.maxTemp.toInt()}',
+                      style: TextStyle(
+                        fontSize: 12,
+                      )),
+                  Text('minTemp: ${weatherData!.minTemp.toInt()}',
+                      style: TextStyle(
+                        fontSize: 12,
+                      )),
                 ],
               ),
+            ],
+          ),
+          Spacer(),
+          Text(
+            weatherData!.weatherStatename,
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
             ),
+          ),
+          Spacer(
+            flex: 5,
+          ),
+        ],
+      ),
     );
   }
 }
